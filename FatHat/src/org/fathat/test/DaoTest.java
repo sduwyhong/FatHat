@@ -1,6 +1,9 @@
 package org.fathat.test;
 
+import java.util.List;
+
 import org.fathat.dao.EnterpriseDao;
+import org.fathat.model.Enterprise;
 import org.fathat.proxy.DaoContainer;
 import org.junit.Test;
 
@@ -13,6 +16,11 @@ public class DaoTest {
 	@Test
 	public void test(){
 		EnterpriseDao enterpriseDao = (EnterpriseDao) DaoContainer.getDao("enterpriseDao");
-		System.out.println(enterpriseDao.getByInfo("北京","网易"));
+//		List<Enterprise> enterprises = enterpriseDao.getAll();
+//		for (Enterprise enterprise : enterprises) {
+//			System.out.println(enterprise);
+//		}
+//		System.out.println(enterpriseDao.getNameById(1));
+		System.out.println(enterpriseDao.getIdByName("网易"));
 	}
 }
