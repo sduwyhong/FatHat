@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.fathat.annotation.Sql;
+import org.fathat.cache.SqlCache;
 import org.fathat.exception.UnsupportReturnType;
 import org.fathat.exception.returnTypeMismatchedException;
 import org.fathat.pool.ConnectionPool;
@@ -47,6 +48,7 @@ public class DaoProxy implements InvocationHandler {
 	}
 
 	private void handleUpdate(String sql, Method method, Object[] args) {
+		//增删改查
 	}
 
 	//异常要不优化一下？？直接Exception算了
@@ -58,6 +60,13 @@ public class DaoProxy implements InvocationHandler {
 		//约定sql开头不能有空格
 		setParam(prepareStatement, method, args);
 		System.out.println(prepareStatement.toString());
+		
+		//查缓存
+		SqlCache cache = SqlCache.getInstance();
+		String statement = prepareStatement.toString();
+		Object obj = cache.get(statement);
+		if(obj != null) return obj;
+		//缓存没有
 		ResultSet rs = prepareStatement.executeQuery();
 		System.out.println("warnings:"+prepareStatement.getWarnings());
 		//获取返回值类型
@@ -101,7 +110,11 @@ public class DaoProxy implements InvocationHandler {
 		rs.close();
 		prepareStatement.close();
 		ConnectionPool.returnConnection(connection);
-		if(list != null) return list;
+		if(list != null) {
+			cache.put(statement, list);
+			return list;
+		}
+		cache.put(statement, instance);
 		return instance;
 	}
 
