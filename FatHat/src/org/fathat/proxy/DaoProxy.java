@@ -59,14 +59,13 @@ public class DaoProxy implements InvocationHandler {
 		PreparedStatement prepareStatement = connection.prepareStatement(sql);
 		//约定sql开头不能有空格
 		setParam(prepareStatement, method, args);
-		System.out.println(prepareStatement.toString());
-		
 		//查缓存
 		SqlCache cache = SqlCache.getInstance();
-		String statement = prepareStatement.toString();
+		String statement = prepareStatement.toString().split(":")[1];
 		Object obj = cache.get(statement);
 		if(obj != null) return obj;
 		//缓存没有
+		System.out.println(prepareStatement.toString());
 		ResultSet rs = prepareStatement.executeQuery();
 		System.out.println("warnings:"+prepareStatement.getWarnings());
 		//获取返回值类型
