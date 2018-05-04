@@ -63,15 +63,17 @@ public class JdbcUtil {
 			Method target = setters.get(metaData.getColumnName(i));
 			Class<?>[] paramClass = target.getParameterTypes();
 			//			System.out.println(paramClass[0].getSimpleName());
-			if(short.class == paramClass[0] || int.class == paramClass[0]){
+			if(short.class == paramClass[0] || int.class == paramClass[0] || 
+					Short.class == paramClass[0] || Integer.class == paramClass[0]){
 				target.invoke(instance, rs.getInt(i));
-			}else if(long.class == paramClass[0]){
+			}else if(long.class == paramClass[0] || Long.class == paramClass[0]){
 				target.invoke(instance, rs.getLong(i));
 			}else if(Date.class == paramClass[0]){
 				target.invoke(instance, rs.getDate(i));
-			}else if(boolean.class == paramClass[0]){
+			}else if(boolean.class == paramClass[0] || Boolean.class == paramClass[0]){
 				target.invoke(instance, (boolean)rs.getBoolean(i));
-			}else if(float.class == paramClass[0] || double.class == paramClass[0]){
+			}else if(float.class == paramClass[0] || double.class == paramClass[0] ||
+					Float.class == paramClass[0] || Double.class == paramClass[0]){
 				target.invoke(instance, (double)rs.getDouble(i));
 			}else{
 				target.invoke(instance, (String)rs.getString(i));

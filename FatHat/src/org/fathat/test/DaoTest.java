@@ -16,16 +16,23 @@ public class DaoTest {
 	@Test
 	public void test(){
 		EnterpriseDao enterpriseDao = (EnterpriseDao) DaoContainer.getDao("enterpriseDao");
-		List<Enterprise> enterprises = enterpriseDao.getAll();
-		for (Enterprise enterprise : enterprises) {
-			System.out.println(enterprise);
-		}
-		System.out.println();
-		List<Enterprise> _enterprises = enterpriseDao.getAll();
-		for (Enterprise enterprise : _enterprises) {
-			System.out.println(enterprise);
-		}
+		/**Qurey*/
+//		List<Enterprise> enterprises = enterpriseDao.getAll();
+//		for (Enterprise enterprise : enterprises) {
+//			System.out.println(enterprise);
+//		}
 //		System.out.println(enterpriseDao.getNameById(1));
 //		System.out.println(enterpriseDao.getIdByName("网易"));
+		/**Update*/
+		//基本Update
+//		enterpriseDao.insertEnterprise(10, "腾讯11", "深圳", "牛逼");
+//		enterpriseDao.deleteEnterpriseById(10);
+//		enterpriseDao.updateEnterpriseDescriptionById("阿里牛逼", 10);
+		//insert对象
+//		Enterprise enterprise = new Enterprise(11, "腾讯", "深圳", "牛逼");
+//		System.out.println(enterprise);
+//		enterpriseDao.insertEnterprise(enterprise);
+//		Enterprise enterprise = new Enterprise(0, "网易", "广州", "desc");
+//		enterpriseDao.insertEnterpriseAutoInc(enterprise);
 	}
 }

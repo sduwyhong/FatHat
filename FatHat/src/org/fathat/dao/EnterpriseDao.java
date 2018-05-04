@@ -30,4 +30,20 @@ public interface EnterpriseDao {
 	
 	@Sql("SELECT id FROM enterprise WHERE name = ?")
 	Integer getIdByName(String name);
+	
+	@Sql("INSERT INTO enterprise VALUES (?, ?, ?, ?)")
+	Integer insertEnterprise(int id, String name, String address, String description);
+	
+	@Sql("DELETE FROM enterprise WHERE id = ?")
+	Integer deleteEnterpriseById(int id);
+	
+	@Sql("UPDATE enterprise SET description = ? WHERE id = ?")
+	Integer updateEnterpriseDescriptionById(String description, int id);
+	
+	@Sql("#INSERT INTO enterprise VALUES(?,?,?,?)")
+	Integer insertEnterprise(Enterprise enterprise);
+	
+	@Sql("@INSERT INTO enterprise")
+	Integer insertEnterpriseAutoInc(Enterprise enterprise);
+	
 }
