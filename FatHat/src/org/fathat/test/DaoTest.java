@@ -17,12 +17,12 @@ public class DaoTest {
 	public void test(){
 		EnterpriseDao enterpriseDao = (EnterpriseDao) DaoContainer.getDao("enterpriseDao");
 		/**Qurey*/
-//		List<Enterprise> enterprises = enterpriseDao.getAll();
-//		for (Enterprise enterprise : enterprises) {
-//			System.out.println(enterprise);
-//		}
+		List<Enterprise> enterprises = enterpriseDao.getAll();
+		for (Enterprise enterprise : enterprises) {
+			System.out.println(enterprise);
+		}
 //		System.out.println(enterpriseDao.getNameById(1));
-//		System.out.println(enterpriseDao.getIdByName("网易"));
+//		System.out.println(enterpriseDao.getByName("网易"));
 		/**Update*/
 		//基本Update
 //		enterpriseDao.insertEnterprise(10, "腾讯11", "深圳", "牛逼");

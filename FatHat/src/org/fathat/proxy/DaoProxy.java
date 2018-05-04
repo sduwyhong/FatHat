@@ -26,6 +26,8 @@ import org.fathat.util.ClassUtil;
 import org.fathat.util.ConnectionUtil;
 import org.fathat.util.JdbcUtil;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 /*
  * @author wyhong
  * @date 2018-4-28
@@ -145,7 +147,9 @@ public class DaoProxy implements InvocationHandler {
 	}
 
 	private void updateCache(String statement) {
-		SqlCache.getInstance().update(statement);
+		SqlCache sqlCache = SqlCache.getInstance();
+		System.out.println(sqlCache);
+		sqlCache.update(statement);
 	}
 
 	private Map<String, Object> getFieldMap(Field[] fields, Object obj) throws InsertException {
@@ -411,6 +415,7 @@ public class DaoProxy implements InvocationHandler {
 		if(ClassUtil.isBasicType(returnType)){
 			//返回基本数据类型
 			while(rs.next()){
+				System.out.println("basic:"+returnType.getSimpleName());
 				instance = JdbcUtil.constructBasicObject(returnType, rs);
 				if(list != null){
 					list.add(instance);
@@ -424,7 +429,13 @@ public class DaoProxy implements InvocationHandler {
 			Map<String, Method> setters = new HashMap<String, Method>();
 			ClassUtil.fillSetters(setters, methods);
 			while(rs.next()){
-				instance = returnType.newInstance();
+				System.out.println(returnType.getSimpleName());
+				try {
+					instance = returnType.newInstance();
+				} catch (InstantiationException e) {
+					System.out.println("there is an absence of a default constructor in the return model");
+					e.printStackTrace();
+				}
 				JdbcUtil.setAttributes(instance, rs, setters, metaData);
 				if(list != null){
 					list.add(instance);

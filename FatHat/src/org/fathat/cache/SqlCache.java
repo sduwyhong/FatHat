@@ -56,46 +56,51 @@ public class SqlCache {
 	}
 
 	public synchronized int update(String updateSql) {
-		updateSql = updateSql.toLowerCase().trim();
-		String[] parts = updateSql.split(" ");
-		if (parts.length == 0 || parts == null)
-			return -1;
-		String op = parts[0];
-		String[] tableNames = null;
-		if (op.equals("insert")) {
-			String beforeFrom = StringUtils.substringBefore(updateSql, "from");
-			String tableToBeInserted = null;
-			if (beforeFrom.contains("("))
-				tableToBeInserted = StringUtils.substringBefore(
-						StringUtils.substringAfter(beforeFrom, "into"), "(");
-			else
-				tableToBeInserted = StringUtils.substringAfter(beforeFrom,
-						"into");
-			tableNames = new String[] { StringUtils
-					.deleteWhitespace(tableToBeInserted) };
-		} else if (op.equals("update")) {
-			tableNames = StringUtils.deleteWhitespace(
-					StringUtils.substringBefore(
-							StringUtils.substringAfter(updateSql, "update"),
-							"set")).split(",");
-		} else {
-			tableNames = StringUtils.deleteWhitespace(
-					StringUtils.substringBefore(
-							StringUtils.substringAfter(updateSql, "from"),
-							"where")).split(",");
-		}
-		if (tableNames.length < 1)
-			return -1;
-		Set<String> keySet = resultMap.keySet();
-		int count = 0;
-		for (String sql : keySet) {
-			for (String tableName : tableNames) {
-				if (sql.contains(tableName))
-					resultMap.remove(sql);
-				count++;
-				break;
+		try {
+			updateSql = updateSql.toLowerCase().trim();
+			String[] parts = updateSql.split(" ");
+			if (parts.length == 0 || parts == null)
+				return -1;
+			String op = parts[0];
+			String[] tableNames = null;
+			if (op.equals("insert")) {
+				String beforeFrom = StringUtils.substringBefore(updateSql, "from");
+				String tableToBeInserted = null;
+				if (beforeFrom.contains("("))
+					tableToBeInserted = StringUtils.substringBefore(
+							StringUtils.substringAfter(beforeFrom, "into"), "(");
+				else
+					tableToBeInserted = StringUtils.substringAfter(beforeFrom,
+							"into");
+				tableNames = new String[] { StringUtils
+						.deleteWhitespace(tableToBeInserted) };
+			} else if (op.equals("update")) {
+				tableNames = StringUtils.deleteWhitespace(
+						StringUtils.substringBefore(
+								StringUtils.substringAfter(updateSql, "update"),
+								"set")).split(",");
+			} else {
+				tableNames = StringUtils.deleteWhitespace(
+						StringUtils.substringBefore(
+								StringUtils.substringAfter(updateSql, "from"),
+								"where")).split(",");
 			}
+			if (tableNames.length < 1)
+				return -1;
+			Set<String> keySet = resultMap.keySet();
+			int count = 0;
+			for (String sql : keySet) {
+				for (String tableName : tableNames) {
+					if (sql.contains(tableName))
+						resultMap.remove(sql);
+					count++;
+					break;
+				}
+			}
+			return count;
+		} catch (NullPointerException e) {
+			e.printStackTrace();
 		}
-		return count;
+		return 0;
 	}
 }
